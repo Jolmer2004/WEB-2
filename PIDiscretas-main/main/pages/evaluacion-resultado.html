@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YEMM | Resultado Evaluacion</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="logo-band"><a class="logo" href="../index.html">YEMM</a></div>
+    <nav class="main-nav container">
+      <a href="../index.html">Inicio</a>
+      <a href="./dashboard.html">Dashboard</a>
+      <details class="modules-dropdown">
+        <summary>Modulos</summary>
+        <div class="modules-dropdown-menu" role="menu">
+          <a href="./modulo-1.html">Modulo 1</a>
+          <a href="./modulo-2.html">Modulo 2</a>
+          <a href="./modulo-3.html">Modulo 3</a>
+        </div>
+      </details>
+      <a class="is-active" href="./evaluacion.html">Evaluacion</a>
+      <a href="./perfil.html">Perfil</a>
+      <a href="./login.html">Login</a>
+      <a href="./register.html">Registro</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <div class="container" style="max-width: 980px;">
+
+      <section class="card card-muted" style="text-align:center; margin-bottom: 1rem;">
+        <h1 style="margin-bottom: 0.5rem;">Examen completado</h1>
+        <p style="margin-top:0; color:#4b5563;">Resumen del resultado.</p>
+
+        <div class="grid cols-3" style="margin-top: 1rem;">
+          <article class="card">
+            <div class="kpi">Puntaje</div>
+            <strong id="puntaje" style="color:#6b21a8; font-size:1.8rem;">0/15</strong>
+          </article>
+
+          <article class="card">
+            <div class="kpi">Porcentaje</div>
+            <strong id="porcentaje" style="color:#6b21a8; font-size:1.8rem;">0%</strong>
+          </article>
+
+          <article class="card">
+            <div class="kpi">Calificacion</div>
+            <strong id="calificacion" style="color:#16a34a; font-size:1.3rem;">-</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="card" style="margin-bottom: 1rem;">
+        <h3>Revisión de respuestas</h3>
+        <ul id="lista" class="list"></ul>
+      </section>
+
+      <section class="row">
+        <a class="btn btn-purple" href="./evaluacion.html">Intentar de nuevo</a>
+        <a class="btn btn-outline" href="./dashboard.html">Volver al dashboard</a>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>2026 YEMM</p>
+    </div>
+  </footer>
+
+  <script>
+    const preguntas = [
+      // MÓDULO 1 — Lógica y Conjuntos
+      { modulo: "Lógica y Conjuntos", texto: "¿Cuál es el valor de p ∧ ¬p?", correcta: "Falso" },
+      { modulo: "Lógica y Conjuntos", texto: "¿Qué representa A ∩ B?", correcta: "Intersección" },
+      { modulo: "Lógica y Conjuntos", texto: "¿Qué representa A ∪ B?", correcta: "Unión" },
+      { modulo: "Lógica y Conjuntos", texto: "Tabla de verdad de ¬p", correcta: "V→F, F→V" },
+      { modulo: "Lógica y Conjuntos", texto: "Conjuntos disjuntos son:", correcta: "Sin elementos en común" },
+
+      // MÓDULO 2 — Teoría de Números
+      { modulo: "Teoría de Números", texto: "¿Cuál de estos es un número primo?", correcta: "13" },
+      { modulo: "Teoría de Números", texto: "¿Cuál es el residuo de 9 mod 4?", correcta: "1" },
+      { modulo: "Teoría de Números", texto: "¿Cuál es el residuo de 2 mod 2?", correcta: "0" },
+      { modulo: "Teoría de Números", texto: "¿Cuál de estos números es compuesto?", correcta: "15" },
+      { modulo: "Teoría de Números", texto: "¿Cuál de los siguientes es un número primo?", correcta: "11" },
+
+      // MÓDULO 3 — Congruencias Lineales
+      { modulo: "Congruencias Lineales", texto: "¿Qué significa a ≡ b (mod m)?", correcta: "a y b tienen el mismo residuo" },
+      { modulo: "Congruencias Lineales", texto: "¿Cuál es el residuo de 7 mod 9?", correcta: "7" },
+      { modulo: "Congruencias Lineales", texto: "¿Cuál es el residuo de 22 mod 4?", correcta: "2" },
+      { modulo: "Congruencias Lineales", texto: "¿Cuál congruencia es verdadera?", correcta: "7 ≡ 0 (mod 7)" },
+      { modulo: "Congruencias Lineales", texto: "¿Cuál número es congruente con 4 mod 12?", correcta: "16" }
+    ];
+
+
+    const respuestas = JSON.parse(localStorage.getItem("respuestas")) || [];
+
+    let correctas = 0;
+    const lista = document.getElementById("lista");
+
+    preguntas.forEach((p, i) => {
+      const esCorrecta = respuestas[i] === p.correcta;
+      if (esCorrecta) correctas++;
+
+      lista.innerHTML += `
+        <li>
+          ${i + 1}. ${p.texto} → 
+          <strong style="color:${esCorrecta ? '#16a34a' : '#dc2626'}">
+            ${esCorrecta ? "Correcta" : "Incorrecta"}
+          </strong>
+          ${!esCorrecta ? `(Correcta: ${p.correcta})` : ""}
+        </li>
+      `;
+    });
+
+    const porcentaje = Math.round((correctas / 15) * 100);
+
+    document.getElementById("puntaje").textContent = `${correctas}/15`;
+    document.getElementById("porcentaje").textContent = `${porcentaje}%`;
+
+    let calificacion = "";
+    if (porcentaje >= 90) calificacion = "Excelente";
+    else if (porcentaje >= 70) calificacion = "Muy bien";
+    else if (porcentaje >= 50) calificacion = "Regular";
+    else calificacion = "Necesita mejorar";
+
+    document.getElementById("calificacion").textContent = calificacion;
+  </script>
+
+</body>
+
+</html>

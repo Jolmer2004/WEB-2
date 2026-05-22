@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YEMM | Perfil</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo-band"><a class="logo" href="../index.html">YEMM</a></div>
+    <nav class="main-nav container">
+      <a href="../index.html">Inicio</a>
+      <a href="./dashboard.html">Dashboard</a>
+      <details class="modules-dropdown">
+        <summary>Modulos</summary>
+        <div class="modules-dropdown-menu" role="menu">
+          <a href="./modulo-1.html">Modulo 1</a>
+          <a href="./modulo-2.html">Modulo 2</a>
+          <a href="./modulo-3.html">Modulo 3</a>
+        </div>
+      </details>
+      <a href="./evaluacion.html">Evaluacion</a>
+      <a class="is-active" href="./perfil.html">Perfil</a>
+      <a href="./login.html">Login</a>
+      <a href="./register.html">Registro</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <header class="page-header row">
+        <div>
+          <h1>Mi perfil</h1>
+          <p>Vista de usuario con progreso, evaluaciones y actividad reciente.</p>
+        </div>
+        <a class="btn btn-outline" href="#">Configuracion</a>
+      </header>
+
+      <section class="grid cols-3">
+        <article class="card card-muted">
+          <h3>Usuario</h3>
+          <p><strong>Juan Perez</strong><br />juan.perez@email.com<br />Miembro desde Enero 2026</p>
+          <a class="btn btn-purple block" href="#">Editar perfil</a>
+        </article>
+
+        <article class="card card-muted">
+          <h3>Estadisticas</h3>
+          <p class="kpi">Progreso total</p>
+          <div class="progress-track"><div class="progress-bar" style="width: 47%;"></div></div>
+          <p class="kpi" style="margin-top:0.7rem;">Lecciones 28/60</p>
+          <div class="progress-track"><div class="progress-bar" style="width: 47%;"></div></div>
+          <p style="margin-top: 0.8rem; color: #4b5563;">24 horas estudiadas | 12 logros</p>
+        </article>
+
+        <article class="card">
+          <h3>Logros recientes</h3>
+          <ul class="list">
+            <li>Primera leccion</li>
+            <li>Maestro de la logica</li>
+            <li>Experto en induccion matematica</li>
+            <li>Semana completa</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="grid cols-2" style="margin-top: 1rem;">
+        <article class="card">
+          <h3>Progreso por modulo</h3>
+          <p class="kpi">Modulo 1 - 75%</p>
+          <div class="progress-track"><div class="progress-bar" style="width: 75%;"></div></div>
+          <p class="kpi" style="margin-top:0.7rem;">Modulo 2 - 45%</p>
+          <div class="progress-track"><div class="progress-bar" style="width: 45%;"></div></div>
+          <p class="kpi" style="margin-top:0.7rem;">Modulo 3 - 20%</p>
+          <div class="progress-track"><div class="progress-bar" style="width: 20%;"></div></div>
+        </article>
+
+        <article class="card">
+          <h3>Historial de evaluaciones</h3>
+          <table class="table">
+            <thead><tr><th>Fecha</th><th>Modulo</th><th>Puntaje</th></tr></thead>
+            <tbody>
+              <tr><td>25 Mar 2026</td><td>General</td><td>85</td></tr>
+              <tr><td>20 Mar 2026</td><td>Modulo 1</td><td>90</td></tr>
+              <tr><td>15 Mar 2026</td><td>Modulo 2</td><td>78</td></tr>
+            </tbody>
+          </table>
+          <a class="btn btn-amber" href="./evaluacion.html" style="margin-top:0.8rem;">Nueva evaluacion</a>
+        </article>
+      </section>
+
+      <section class="card" style="margin-top: 1rem;">
+        <h3>Actividad reciente</h3>
+        <ul class="list">
+          <li>Completaste: Tablas de verdad - Hace 2 horas</li>
+          <li>Logro desbloqueado: Maestro de la logica - Hace 5 horas</li>
+          <li>Evaluacion completada: 85/100 - Hace 1 dia</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p>2026 YEMM</p></div></footer>
+</body>
+</html>
