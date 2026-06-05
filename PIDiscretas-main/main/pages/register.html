@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YEMM | Registro</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo-band"><a class="logo" href="../index.html">YEMM</a></div>
+    <nav class="main-nav container">
+      <a href="../index.html">Inicio</a>
+      <a href="./dashboard.html">Dashboard</a>
+      <details class="modules-dropdown">
+        <summary>Modulos</summary>
+        <div class="modules-dropdown-menu" role="menu">
+          <a href="./modulo-1.html">Modulo 1</a>
+          <a href="./modulo-2.html">Modulo 2</a>
+          <a href="./modulo-3.html">Modulo 3</a>
+        </div>
+      </details>
+      <a href="./evaluacion.html">Evaluacion</a>
+      <a href="./perfil.html">Perfil</a>
+      <a href="./login.html">Login</a>
+      <a class="is-active" href="./register.html">Registro</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <div class="container" style="max-width: 580px;">
+      <section class="card card-muted">
+        <div class="page-header" style="margin-bottom: 1.2rem;">
+          <h1>Crear cuenta</h1>
+          <p>Comienza tu viaje de aprendizaje en matematicas discretas.</p>
+        </div>
+        <form class="grid" action="./perfil.html">
+          <label for="name">Nombre completo</label>
+          <input id="name" name="name" type="text" placeholder="Juan Perez" required style="padding: 0.7rem; border: 1px solid #d8b4fe; border-radius: 10px;" />
+          <label for="email">Correo electronico</label>
+          <input id="email" name="email" type="email" placeholder="tu@email.com" required style="padding: 0.7rem; border: 1px solid #d8b4fe; border-radius: 10px;" />
+          <label for="password">Contrasena</label>
+          <input id="password" name="password" type="password" placeholder="********" required style="padding: 0.7rem; border: 1px solid #d8b4fe; border-radius: 10px;" />
+          <label for="confirm">Confirmar contrasena</label>
+          <input id="confirm" name="confirm" type="password" placeholder="********" required style="padding: 0.7rem; border: 1px solid #d8b4fe; border-radius: 10px;" />
+          <label style="font-size: 0.9rem; color: #4b5563;"><input type="checkbox" required /> Acepto terminos y politica de privacidad</label>
+          <button class="btn btn-purple block" type="submit">Registrarse</button>
+        </form>
+        <p style="margin: 1rem 0 0; color: #4b5563; font-size: 0.93rem;">
+          Ya tienes cuenta? <a href="./login.html" style="color: #6b21a8; font-weight: 700;">Inicia sesion</a>
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p>2026 YEMM</p></div></footer>
+</body>
+</html>
