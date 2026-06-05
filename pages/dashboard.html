@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YEMM | Dashboard</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo-band"><a class="logo" href="../index.html">YEMM</a></div>
+    <nav class="main-nav container">
+      <a href="../index.html">Inicio</a>
+      <a class="is-active" href="./dashboard.html">Dashboard</a>
+      <details class="modules-dropdown">
+        <summary>Modulos</summary>
+        <div class="modules-dropdown-menu" role="menu">
+          <a href="./modulo-1.html">Modulo 1</a>
+          <a href="./modulo-2.html">Modulo 2</a>
+          <a href="./modulo-3.html">Modulo 3</a>
+        </div>
+      </details>
+      <a href="./evaluacion.html">Evaluacion</a>
+      <a href="./perfil.html">Perfil</a>
+      <a href="./usuarios.html">Usuarios</a>
+      <a href="./login.html">Login</a>
+      <a href="./register.html">Registro</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <header class="page-header">
+        <h1>Dashboard</h1>
+        <p>Resumen de progreso, actividad y acceso a tus modulos.</p>
+      </header>
+
+      <section class="card modules-panel" style="margin-bottom: 1rem;">
+        <div class="row" style="margin-bottom: 0.8rem;">
+          <h3 style="margin: 0;">Modulos disponibles</h3>
+          <span class="badge">3 activos</span>
+        </div>
+        <div class="modules-grid">
+          <article class="card module-card">
+            <div class="module-topline">Modulo 1</div>
+            <h4>Logica proposicional, predicados y demostracion</h4>
+            <p class="kpi">Lógica proposicional, lógica de predicados y técnicas de demostración.</p>
+            <div class="progress-track"><div class="progress-bar" style="width: 75%;"></div></div>
+            <div class="module-meta">Progreso: 75%</div>
+            <a class="btn btn-purple block" href="./modulo-1.html">Ir al modulo</a>
+          </article>
+
+          <article class="card module-card">
+            <div class="module-topline">Modulo 2</div>
+            <h4>Induccion, sucesiones y teoria de numeros</h4>
+            <p class="kpi">Inducción matemática, sumatorias, progresiones y Teorema Chino del Residuo.</p>
+            <div class="progress-track"><div class="progress-bar" style="width: 45%;"></div></div>
+            <div class="module-meta">Progreso: 45%</div>
+            <a class="btn btn-purple block" href="./modulo-2.html">Ir al modulo</a>
+          </article>
+
+          <article class="card module-card">
+            <div class="module-topline">Modulo 3</div>
+            <h4>Integracion de Modulo 1 y 2 (temporal)</h4>
+            <p class="kpi">Combinación temporal de temas de lógica, demostración, inducción y números.</p>
+            <div class="progress-track"><div class="progress-bar" style="width: 20%;"></div></div>
+            <div class="module-meta">Progreso: 20%</div>
+            <a class="btn btn-purple block" href="./modulo-3.html">Ir al modulo</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="grid cols-3" style="margin-bottom: 1rem;">
+        <article class="card card-muted stat"><div><div class="kpi">Progreso total</div><strong>47%</strong></div><span class="badge">General</span></article>
+        <article class="card card-muted stat"><div><div class="kpi">Lecciones</div><strong>28/60</strong></div><span class="badge">Activas</span></article>
+        <article class="card card-muted stat"><div><div class="kpi">Tiempo estudiado</div><strong>24h</strong></div><span class="badge">Ultima semana</span></article>
+      </section>
+
+      <section class="grid cols-2" style="margin-bottom: 1rem;">
+        <article class="card">
+          <h3>Progreso semanal (resumen)</h3>
+          <table class="table">
+            <thead><tr><th>Dia</th><th>Horas</th><th>Lecciones</th></tr></thead>
+            <tbody>
+              <tr><td>Lun</td><td>2.5</td><td>3</td></tr>
+              <tr><td>Mar</td><td>3.0</td><td>4</td></tr>
+              <tr><td>Mie</td><td>1.5</td><td>2</td></tr>
+              <tr><td>Jue</td><td>4.0</td><td>5</td></tr>
+              <tr><td>Vie</td><td>2.0</td><td>2</td></tr>
+            </tbody>
+          </table>
+        </article>
+        <article class="card">
+          <h3>Rendimiento por modulo</h3>
+          <p class="kpi">Modulo 1 - Logica proposicional, predicados y demostracion (75%)</p>
+          <div class="progress-track"><div class="progress-bar" style="width: 75%;"></div></div>
+          <p class="kpi" style="margin-top: 0.9rem;">Modulo 2 - Induccion, sucesiones y teoria de numeros (45%)</p>
+          <div class="progress-track"><div class="progress-bar" style="width: 45%;"></div></div>
+          <p class="kpi" style="margin-top: 0.9rem;">Modulo 3 - Integracion de Modulo 1 y 2 (20%)</p>
+          <div class="progress-track"><div class="progress-bar" style="width: 20%;"></div></div>
+          <a class="btn btn-purple" href="./evaluacion.html" style="margin-top: 1rem;">Hacer evaluacion</a>
+        </article>
+      </section>
+
+      <section class="card">
+        <h3>Actividad reciente</h3>
+        <ul class="list">
+          <li>Completaste: Tablas de verdad (Modulo 1) - Hace 2 horas</li>
+          <li>Nuevo logro: Maestro de la logica - Hace 5 horas</li>
+          <li>Completaste: Teorema Chino del Residuo (Modulo 2) - Hace 1 dia</li>
+          <li>Iniciaste: Taller de integracion M1 + M2 (Modulo 3) - Hace 2 dias</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p>2026 YEMM</p></div></footer>
+</body>
+</html>

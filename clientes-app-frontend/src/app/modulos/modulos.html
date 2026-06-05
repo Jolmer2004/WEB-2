@@ -1,0 +1,31 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <strong>Lista de Modulos</strong>
+  </div>
+
+  <ul class="list-group list-group-flush">
+    <li *ngFor="let item of modulos" class="list-group-item">
+      <div class="d-flex align-items-center">
+
+        <div class="flex-grow-1">
+          <strong>{{ item.id }} {{ item.titulo }} {{ item.orden }}</strong>
+          <br>
+          <span class="text-muted">{{ item.descripcion }}</span>
+
+          <!-- Temas del módulo -->
+          <ul *ngIf="item.temas && item.temas.length > 0" class="mt-2 ps-3">
+            <li *ngFor="let tema of item.temas">
+              <strong>{{ tema.orden }}. {{ tema.titulot }}</strong>
+              <span *ngIf="tema.texto" class="text-muted ms-2">{{ tema.texto }}</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </li>
+  </ul>
+
+  <div *ngIf="modulos.length === 0" class="card-body text-center text-muted">
+    No hay modulos registrados.
+  </div>
+</div>

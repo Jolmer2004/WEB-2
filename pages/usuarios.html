@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YEMM | Usuarios</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    /* ── Estados de feedback ─────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+      padding: 0.85rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.94rem;
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+    }
+    .toast.show   { opacity: 1; transform: translateY(0); }
+    .toast.ok     { background: var(--emerald-600); }
+    .toast.err    { background: #dc2626; }
+    .toast.warn   { background: var(--amber-600); }
+
+    /* ── Modal ───────────────────────────────────────────── */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(30,10,60,0.45);
+      z-index: 50;
+      align-items: center;
+      justify-content: center;
+    }
+    .overlay.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 1.6rem;
+      width: min(500px, calc(100vw - 2rem));
+      box-shadow: 0 24px 60px rgba(91,33,182,0.18);
+      border: 1px solid var(--purple-200);
+    }
+    .modal h2 { margin: 0 0 1.2rem; color: #26184a; font-size: 1.3rem; }
+    .modal label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--purple-800);
+      margin-bottom: 0.3rem;
+    }
+    .modal input {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid var(--purple-300);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      margin-bottom: 0.9rem;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+    .modal input:focus { outline: 2px solid var(--purple-600); border-color: transparent; }
+    .modal-actions { display: flex; gap: 0.7rem; justify-content: flex-end; margin-top: 0.4rem; }
+
+    /* ── Tabla de usuarios ───────────────────────────────── */
+    .table .actions { display: flex; gap: 0.5rem; }
+    .btn-sm {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.82rem;
+      border-radius: 8px;
+      font-weight: 600;
+      border: 0;
+      cursor: pointer;
+    }
+    .btn-edit  { background: var(--purple-100); color: var(--purple-800); }
+    .btn-edit:hover  { background: var(--purple-200); }
+    .btn-del   { background: #fee2e2; color: #dc2626; }
+    .btn-del:hover   { background: #fecaca; }
+
+    /* ── Barra superior de la sección ────────────────────── */
+    .section-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    .section-bar h2 { margin: 0; color: #26184a; font-size: 1.15rem; }
+
+    /* ── Chip de rol ─────────────────────────────────────── */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+    }
+    .chip-admin  { background: #fde68a; color: #92400e; }
+    .chip-user   { background: var(--purple-100); color: var(--purple-800); }
+
+    /* ── Estado vacío / carga ────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--gray-600);
+    }
+    .empty-state p { margin: 0.5rem 0 0; font-size: 0.95rem; }
+
+    /* ── Token panel ─────────────────────────────────────── */
+    .token-section {
+      background: linear-gradient(145deg, var(--purple-50), #fff);
+      border: 1px solid var(--purple-200);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .token-section h3 { margin: 0 0 0.7rem; color: #26184a; font-size: 1rem; }
+    .token-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .token-row input {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.65rem;
+      border: 1px solid var(--purple-300);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: monospace;
+    }
+    .token-row input:focus { outline: 2px solid var(--purple-600); border-color: transparent; }
+    #token-status {
+      font-size: 0.82rem;
+      margin-top: 0.5rem;
+      color: var(--gray-600);
+      min-height: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HEADER ══════════════════════════════════════════════════════════ -->
+  <header class="site-header">
+    <div class="logo-band"><a class="logo" href="../index.html">YEMM</a></div>
+    <nav class="main-nav container">
+      <a href="../index.html">Inicio</a>
+      <a href="./dashboard.html">Dashboard</a>
+      <details class="modules-dropdown">
+        <summary>Modulos</summary>
+        <div class="modules-dropdown-menu" role="menu">
+          <a href="./modulo-1.html">Modulo 1</a>
+          <a href="./modulo-2.html">Modulo 2</a>
+          <a href="./modulo-3.html">Modulo 3</a>
+        </div>
+      </details>
+      <a href="./evaluacion.html">Evaluacion</a>
+      <a href="./perfil.html">Perfil</a>
+      <a class="is-active" href="./usuarios.html">Usuarios</a>
+      <a href="./login.html">Login</a>
+      <a href="./register.html">Registro</a>
+    </nav>
+  </header>
+
+  <!-- ══ MAIN ════════════════════════════════════════════════════════════ -->
+  <main class="page">
+    <div class="container">
+
+      <header class="page-header row">
+        <div>
+          <h1>Gestion de usuarios</h1>
+          <p>CRUD completo conectado al <strong>usuario-service</strong> (puerto 8082).</p>
+        </div>
+      </header>
+
+      <!-- ── Panel de token JWT ─────────────────────────── -->
+      <section class="token-section">
+        <h3>🔑 Token JWT (Keycloak)</h3>
+        <p style="margin:0 0 0.7rem; color:var(--gray-600); font-size:0.9rem;">
+          Obtén un token con <code>curl</code> y pégalo aquí para autenticar las peticiones.
+          Con <strong>alice</strong> (USER) solo puedes consultar. Con <strong>admin_user</strong> (ADMIN) puedes crear, editar y eliminar.
+        </p>
+        <div class="token-row">
+          <input type="password" id="jwt-input" placeholder="Pega tu token JWT aquí…" />
+          <button class="btn btn-purple" onclick="aplicarToken()">Aplicar</button>
+          <button class="btn btn-outline" onclick="limpiarToken()">Limpiar</button>
+        </div>
+        <div id="token-status">Sin token — las peticiones devolverán 401.</div>
+        <details style="margin-top:0.8rem;">
+          <summary style="cursor:pointer; font-size:0.87rem; color:var(--purple-700); font-weight:600;">
+            Ver comandos curl para obtener tokens ▾
+          </summary>
+          <pre style="margin:0.6rem 0 0; background:var(--purple-50); border:1px solid var(--purple-200);
+               border-radius:10px; padding:0.85rem; font-size:0.82rem; overflow-x:auto; color:#26184a;"># Token para alice (rol USER — solo lectura)
+curl -s -X POST \
+  "http://localhost:8090/realms/curso-springboot/protocol/openid-connect/token" \
+  -d "grant_type=password&client_id=usuario-service&username=alice&password=alice123" \
+  | python3 -c "import json,sys; print(json.load(sys.stdin)['access_token'])"
+
+# Token para admin_user (rol ADMIN — lectura y escritura)
+curl -s -X POST \
+  "http://localhost:8090/realms/curso-springboot/protocol/openid-connect/token" \
+  -d "grant_type=password&client_id=usuario-service&username=admin_user&password=admin123" \
+  | python3 -c "import json,sys; print(json.load(sys.stdin)['access_token'])"</pre>
+        </details>
+      </section>
+
+      <!-- ── Tabla ──────────────────────────────────────── -->
+      <section class="card">
+        <div class="section-bar">
+          <h2>Lista de usuarios</h2>
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <button class="btn btn-outline" onclick="cargarUsuarios()">↺ Recargar</button>
+            <button class="btn btn-purple" onclick="abrirModalCrear()">+ Nuevo usuario</button>
+          </div>
+        </div>
+
+        <div id="tabla-wrap">
+          <div class="empty-state">
+            <p>Aplica un token JWT y haz clic en <strong>Recargar</strong> para listar los usuarios.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p>2026 YEMM</p></div></footer>
+
+  <!-- ══ MODAL CREAR / EDITAR ════════════════════════════════════════════ -->
+  <div class="overlay" id="modal-overlay">
+    <div class="modal">
+      <h2 id="modal-titulo">Nuevo usuario</h2>
+      <input type="hidden" id="modal-id" />
+
+      <label for="f-nombre">Nombre</label>
+      <input id="f-nombre" type="text" placeholder="Ada" />
+
+      <label for="f-apellido">Apellido</label>
+      <input id="f-apellido" type="text" placeholder="Lovelace" />
+
+      <label for="f-email">Email</label>
+      <input id="f-email" type="email" placeholder="ada@babbage.uk" />
+
+      <label for="f-username">Username</label>
+      <input id="f-username" type="text" placeholder="ada_lovelace" />
+
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn btn-purple" onclick="guardarUsuario()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TOAST ════════════════════════════════════════════════════════════ -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ══ SCRIPT ══════════════════════════════════════════════════════════ -->
+  <script>
+    // ── Configuración ─────────────────────────────────────────────────────
+    const API = 'http://localhost:8082/api/v1/usuario-service/usuarios';
+    let token = '';
+
+    // ── Token ─────────────────────────────────────────────────────────────
+    function aplicarToken() {
+      const val = document.getElementById('jwt-input').value.trim();
+      if (!val) { mostrarToast('Pega un token antes de aplicar.', 'warn'); return; }
+      token = val;
+      // Decodifica el payload para mostrar el usuario y el rol
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const usuario = payload.preferred_username || payload.sub || '—';
+        const roles   = payload.realm_access?.roles?.join(', ') || '—';
+        const expMs   = payload.exp * 1000;
+        const expStr  = new Date(expMs).toLocaleTimeString();
+        document.getElementById('token-status').innerHTML =
+          `✅ Usuario: <strong>${usuario}</strong> | Roles: <strong>${roles}</strong> | Expira: ${expStr}`;
+      } catch {
+        document.getElementById('token-status').textContent = '✅ Token aplicado.';
+      }
+      mostrarToast('Token aplicado. Haz clic en Recargar.', 'ok');
+    }
+
+    function limpiarToken() {
+      token = '';
+      document.getElementById('jwt-input').value = '';
+      document.getElementById('token-status').textContent = 'Sin token — las peticiones devolverán 401.';
+      document.getElementById('tabla-wrap').innerHTML =
+        '<div class="empty-state"><p>Aplica un token JWT y haz clic en <strong>Recargar</strong>.</p></div>';
+      mostrarToast('Token eliminado.', 'warn');
+    }
+
+    // ── Cabeceras comunes ──────────────────────────────────────────────────
+    function headers(conBody = false) {
+      const h = { 'Authorization': `Bearer ${token}` };
+      if (conBody) h['Content-Type'] = 'application/json';
+      return h;
+    }
+
+    // ── Manejo de errores HTTP ─────────────────────────────────────────────
+    async function manejarRespuesta(res) {
+      if (res.status === 401) throw new Error('401 — Sin token o token inválido/expirado.');
+      if (res.status === 403) throw new Error('403 — Tu rol no tiene permiso para esta operación.');
+      if (res.status === 404) throw new Error('404 — Usuario no encontrado.');
+      if (!res.ok) {
+        const texto = await res.text().catch(() => '');
+        throw new Error(`${res.status} — ${texto || res.statusText}`);
+      }
+      return res;
+    }
+
+    // ── GET /usuarios — cargar tabla ───────────────────────────────────────
+    async function cargarUsuarios() {
+      if (!token) { mostrarToast('Aplica un token primero.', 'warn'); return; }
+      const wrap = document.getElementById('tabla-wrap');
+      wrap.innerHTML = '<div class="empty-state"><p>Cargando…</p></div>';
+      try {
+        const res  = await fetch(API, { headers: headers() });
+        await manejarRespuesta(res);
+        const data = await res.json();
+
+        if (!data.length) {
+          wrap.innerHTML = '<div class="empty-state"><p>No hay usuarios registrados aún.</p></div>';
+          return;
+        }
+
+        wrap.innerHTML = `
+          <div style="overflow-x:auto;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Email</th>
+                  <th>Username</th>
+                  <th>Creado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${data.map(u => `
+                  <tr>
+                    <td><span class="badge">${u.id}</span></td>
+                    <td>${u.nombre}</td>
+                    <td>${u.apellido}</td>
+                    <td>${u.email}</td>
+                    <td><code>${u.username}</code></td>
+                    <td>${u.createAt ?? '—'}</td>
+                    <td>
+                      <div class="actions">
+                        <button class="btn-sm btn-edit" onclick="abrirModalEditar(${u.id},'${esc(u.nombre)}','${esc(u.apellido)}','${esc(u.email)}','${esc(u.username)}')">Editar</button>
+                        <button class="btn-sm btn-del"  onclick="eliminarUsuario(${u.id})">Eliminar</button>
+                      </div>
+                    </td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>`;
+        mostrarToast(`${data.length} usuario(s) cargados.`, 'ok');
+      } catch (e) {
+        wrap.innerHTML = `<div class="empty-state"><p>⚠️ ${e.message}</p></div>`;
+        mostrarToast(e.message, 'err');
+      }
+    }
+
+    // ── Modal helpers ──────────────────────────────────────────────────────
+    function abrirModalCrear() {
+      document.getElementById('modal-titulo').textContent = 'Nuevo usuario';
+      document.getElementById('modal-id').value = '';
+      ['nombre','apellido','email','username'].forEach(f =>
+        document.getElementById('f-'+f).value = '');
+      document.getElementById('modal-overlay').classList.add('open');
+    }
+
+    function abrirModalEditar(id, nombre, apellido, email, username) {
+      document.getElementById('modal-titulo').textContent = 'Editar usuario';
+      document.getElementById('modal-id').value = id;
+      document.getElementById('f-nombre').value   = nombre;
+      document.getElementById('f-apellido').value = apellido;
+      document.getElementById('f-email').value    = email;
+      document.getElementById('f-username').value = username;
+      document.getElementById('modal-overlay').classList.add('open');
+    }
+
+    function cerrarModal() {
+      document.getElementById('modal-overlay').classList.remove('open');
+    }
+
+    // Cierra modal al hacer clic en el fondo
+    document.getElementById('modal-overlay').addEventListener('click', function(e) {
+      if (e.target === this) cerrarModal();
+    });
+
+    // ── POST / PUT — guardar ───────────────────────────────────────────────
+    async function guardarUsuario() {
+      const id       = document.getElementById('modal-id').value;
+      const body     = {
+        nombre:   document.getElementById('f-nombre').value.trim(),
+        apellido: document.getElementById('f-apellido').value.trim(),
+        email:    document.getElementById('f-email').value.trim(),
+        username: document.getElementById('f-username').value.trim(),
+      };
+
+      // Validación básica en el cliente
+      if (!body.nombre || !body.apellido || !body.email || !body.username) {
+        mostrarToast('Completa todos los campos.', 'warn'); return;
+      }
+
+      try {
+        let res;
+        if (id) {
+          // PUT — actualizar
+          res = await fetch(`${API}/${id}`, {
+            method: 'PUT', headers: headers(true), body: JSON.stringify(body)
+          });
+        } else {
+          // POST — crear
+          res = await fetch(API, {
+            method: 'POST', headers: headers(true), body: JSON.stringify(body)
+          });
+        }
+        await manejarRespuesta(res);
+        cerrarModal();
+        mostrarToast(id ? 'Usuario actualizado.' : 'Usuario creado.', 'ok');
+        cargarUsuarios();
+      } catch (e) {
+        mostrarToast(e.message, 'err');
+      }
+    }
+
+    // ── DELETE ─────────────────────────────────────────────────────────────
+    async function eliminarUsuario(id) {
+      if (!confirm(`¿Eliminar usuario #${id}? Esta acción no se puede deshacer.`)) return;
+      try {
+        const res = await fetch(`${API}/${id}`, { method: 'DELETE', headers: headers() });
+        await manejarRespuesta(res);
+        mostrarToast('Usuario eliminado.', 'ok');
+        cargarUsuarios();
+      } catch (e) {
+        mostrarToast(e.message, 'err');
+      }
+    }
+
+    // ── Toast ──────────────────────────────────────────────────────────────
+    let toastTimer;
+    function mostrarToast(msg, tipo = 'ok') {
+      const el = document.getElementById('toast');
+      clearTimeout(toastTimer);
+      el.textContent = msg;
+      el.className   = `toast ${tipo} show`;
+      toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+    }
+
+    // ── Escape para XSS básico en atributos ───────────────────────────────
+    function esc(s) {
+      return String(s).replace(/'/g,"&#39;").replace(/"/g,'&quot;');
+    }
+  </script>
+
+</body>
+</html>

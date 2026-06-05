@@ -1,0 +1,6 @@
+com\yemm\usuario_service\controllers\UsuarioRestController.class
+com\yemm\usuario_service\repositories\IUsuarioDao.class
+com\yemm\usuario_service\services\UsuarioServiceImpl.class
+com\yemm\usuario_service\services\IUsuarioService.class
+com\yemm\usuario_service\entities\Usuario.class
+com\yemm\usuario_service\UsuarioServiceApplication.class

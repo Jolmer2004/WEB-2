@@ -1,0 +1,23 @@
+
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <strong>Lista de Clientes</strong>
+  </div>
+
+  <ul class="list-group list-group-flush">
+    <li *ngFor="let item of temas" class="list-group-item">
+      <div class="d-flex align-items-center">
+
+        <div class="flex-grow-1">
+          <strong>{{ item.titulo }} {{ item.id}}</strong>
+          <br>
+        </div>
+
+      </div>
+    </li>
+  </ul>
+
+  <div *ngIf="temas.length === 0" class="card-body text-center text-muted">
+    No hay temas registrados.
+  </div>
+</div>
